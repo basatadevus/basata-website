@@ -29,7 +29,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Ayub Alhanafi",
     image: "https://api.dicebear.com/9.x/lorelei/svg?seed=Charlie",
-    linkedin: "mailto:ayub@basata.ai",
+    linkedin: "https://linkedin.com/in/ayub-hanafi-75936545",
   },
   {
     name: "Nihaar Nandedkar",
