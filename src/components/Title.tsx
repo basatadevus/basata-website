@@ -114,7 +114,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="text-black text-2xl z-10"
+            className="text-black text-2xl px-7 z-10"
           >
             <motion.span>{displayText}</motion.span>
             {isTypingComplete && (
