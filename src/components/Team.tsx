@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaLinkedin } from "react-icons/fa6";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Define the structure of a team member
 interface TeamMember {
@@ -43,6 +44,11 @@ const teamMembers: TeamMember[] = [
 ];
 
 function Team() {
+  const [showModal, setShowModal] = useState(false);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setShowModal(true);
+  };
   return (
     <div className="grid grid-cols-2 gap-8 p-8">
       <div>
@@ -66,7 +72,7 @@ function Team() {
       </div>
       <div className="bg-gray-100 p-6 rounded-lg">
         <h2 className="text-black text-2xl font-bold mb-4">Contact Us</h2>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Name"
@@ -90,6 +96,32 @@ function Team() {
           </button>
         </form>
       </div>
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          >
+            <motion.div
+              initial={{ y: -50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              className="bg-white p-6 rounded-lg shadow-lg"
+            >
+              <h3 className="text-xl font-bold mb-2">Thank you!</h3>
+              <p>We're glad to hear from you. Hang tight, we'll get back to you soon.</p>
+              <button
+                onClick={() => setShowModal(false)}
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+              >
+                Close
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
