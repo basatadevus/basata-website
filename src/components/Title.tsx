@@ -9,9 +9,14 @@ function Title({ onMeetTeamClick }: TitleProps) {
   const [isCircleComplete, setIsCircleComplete] = useState(false);
   const [isTextComplete, setIsTextComplete] = useState(false);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const [showMission, setShowMission] = useState(false);
+  const [isMissionComplete, setIsMissionComplete] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const text = "The AI-powered operational backbone for US clinics.";
+  const mission = "Welcome to Basata, where we're revolutionizing healthcare by creating an AI-powered operational backbone that empowers doctors to focus on what truly matters—caring for patients.";
   const displayText = useTransform(rounded, (latest) => text.slice(0, latest));
 
   const circleControls = useAnimation();
@@ -38,7 +43,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
         x: 0,
         transition: { duration: 1 }
       });
-      setIsTextComplete(true);
+      setTimeout(() => setIsTextComplete(true), 750);
       ekgControls.start({
         pathLength: [0, 1],
         transition: { duration: 2, ease: "linear", repeat: Infinity }
@@ -53,11 +58,25 @@ function Title({ onMeetTeamClick }: TitleProps) {
         type: "tween",
         duration: 3,
         ease: "easeInOut",
-        onComplete: () => setIsTypingComplete(true),
+        onComplete: () => {
+          setTimeout(() => setIsTypingComplete(true), 750);
+        },
       });
       return controls.stop;
     }
   }, [isTextComplete, count, text.length]);
+
+  useEffect(() => {
+    if (isTypingComplete) {
+      setTimeout(() => setShowMission(true), 750);
+    }
+  }, [isTypingComplete]);
+
+  useEffect(() => {
+    if (isMissionComplete) {
+      setTimeout(() => setShowButton(true), 750);
+    }
+  }, [isMissionComplete]);
 
   return (
     <div className="relative flex flex-col gap-14 h-screen w-screen justify-center items-center overflow-hidden bg-white">
@@ -92,7 +111,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             initial={{ opacity: 0, x: 50 }}
             animate={textControls}
           >
-            basata AI
+            Basata AI
           </motion.text>
         </svg>
       </div>
@@ -102,7 +121,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             d="M0,500 Q250,400 300,500 T600,500 T1000,500"
             fill="none"
             stroke="rgba(0, 255, 255, 0.3)"
-            strokeWidth="4"
+            strokeWidth="6"
             initial={{ pathLength: 0 }}
             animate={ekgControls}
           />
@@ -130,7 +149,20 @@ function Title({ onMeetTeamClick }: TitleProps) {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {isTypingComplete && (
+        {showMission && (
+          <motion.h3
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            onAnimationComplete={() => setIsMissionComplete(true)}
+            className="text-black text-2xl px-7 z-10"
+          >
+            {mission}
+          </motion.h3>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showButton && (
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
