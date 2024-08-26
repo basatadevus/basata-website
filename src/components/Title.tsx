@@ -16,7 +16,8 @@ function Title({ onMeetTeamClick }: TitleProps) {
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
   const text = "The AI-powered operational backbone for US clinics.";
-  const mission = "Welcome to Basata, where we're revolutionizing healthcare by creating an AI-powered operational backbone that empowers doctors to focus on what truly matters—caring for patients.";
+  const mission = `Welcome to Basata, where we're revolutionizing healthcare by empowering doctors to focus on what truly matters — <span class="italic text-gray-600">caring for their patients.</span>`;
+
   const displayText = useTransform(rounded, (latest) => text.slice(0, latest));
 
   const circleControls = useAnimation();
@@ -155,10 +156,9 @@ function Title({ onMeetTeamClick }: TitleProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
             onAnimationComplete={() => setIsMissionComplete(true)}
-            className="text-black text-2xl px-7 z-10"
-          >
-            {mission}
-          </motion.h3>
+            className="text-black text-2xl items-center justify-center mx-[20%] px-7 z-10"
+            dangerouslySetInnerHTML={{ __html: mission }}
+          />
         )}
       </AnimatePresence>
       <AnimatePresence>
