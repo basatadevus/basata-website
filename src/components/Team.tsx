@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaLinkedin } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
+import emailjs from "@emailjs/browser";
 interface TeamMember {
   name: string;
   image: string;
@@ -37,9 +38,42 @@ const teamMembers: TeamMember[] = [
 
 function Team() {
   const [showModal, setShowModal] = useState(false);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    const {name, value} = e.target;
+    setForm({
+      ...form,
+      [name]: value
+    });
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setShowModal(true);
+    const form = new FormData(e.target as HTMLFormElement);
+    try{
+      await emailjs.send(
+        import.meta.env.VITE_serviceID,
+        import.meta.env.VITE_templateID,
+        {
+          from_name:form.get('name'),
+          from_email: form.get('email'),
+          message:form.get('message')
+        },
+        import.meta.env.VITE_publicKey,
+      )
+      setShowModal(true);
+      setForm({
+        name: '',
+        email: '',
+        message: '',
+      });
+    }catch(error){
+      console.log(error);
+      alert("Error sending message");
+    }
   };
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
@@ -70,6 +104,8 @@ function Team() {
                 type="text"
                 name="name"
                 placeholder="Name"
+                value={form.name}
+                onChange={handleChange}
                 className="w-full p-2 rounded border border-gray-300"
                 required
               />
@@ -77,16 +113,20 @@ function Team() {
                 type="email"
                 name="email"
                 placeholder="Email"
+                value={form.email}
+                onChange={handleChange}
                 className="w-full p-2 rounded border border-gray-300"
                 required
               />
               <textarea
                 name="message"
                 placeholder="Message"
-                rows={4}
+                rows={3}
+                value={form.message}
+                onChange={handleChange}
                 className="w-full p-2 rounded border border-gray-300"
                 required
-              ></textarea>
+               />
               <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"

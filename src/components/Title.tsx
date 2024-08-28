@@ -26,25 +26,33 @@ function Title({ onMeetTeamClick }: TitleProps) {
 
   useEffect(() => {
     const animateSequence = async () => {
+      // Initial large circle
       await circleControls.start({
         pathLength: 1,
         transition: { duration: 2, ease: "easeInOut" }
       });
       setIsCircleComplete(true);
 
+      // Shrink and position the circle
       await circleControls.start({
-        r: 25,
+        r: 24,
         cx: 376,
         cy: 200,
-        stroke: "black",
         transition: { duration: 1, ease: "easeInOut" }
       });
 
+      // Start breathing effect
       circleControls.start({
-        scale: [1, 1.05, 1],
-        transition: { duration: 2, repeat: Infinity, repeatType: "reverse" }
+        scale: [1, 1.1, 1],
+        transition: {
+          duration: 2,
+          times: [0, 0.5, 1],
+          repeat: Infinity,
+          ease: "easeInOut"
+        }
       });
 
+      // Fade in the text
       await textControls.start({
         opacity: 1,
         x: 0,
@@ -52,6 +60,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
       });
       setTimeout(() => setIsTextComplete(true), 750);
 
+      // Start the EKG animation
       ekgControls.start({
         pathLength: [0, 1],
         transition: { duration: 2, ease: "linear", repeat: Infinity }
@@ -87,16 +96,17 @@ function Title({ onMeetTeamClick }: TitleProps) {
   }, [isMissionComplete]);
 
   return (
-    <div className="relative flex flex-col gap-14 h-screen w-screen justify-center items-center overflow-hidden bg-white">
+    <div className="relative flex flex-col gap-y-5 h-[100vh] w-[100vw] justify-center items-center overflow-y-visible bg-white">
       <div className="flex items-center justify-center w-full z-10">
-        <svg width="800" height="400" viewBox="0 0 800 400">
+        <svg className="w-[750px] h-[400px] pr-[7%]" viewBox="0 0 800 400">
           <motion.circle
-            cx="380"
+            cx="400"
             cy="200"
             r="150"
             fill="none"
             stroke="black"
             strokeWidth="8"
+            strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={circleControls}
           />
@@ -114,7 +124,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
         </svg>
       </div>
       {isCircleComplete && (
-        <svg className="absolute w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        <svg className="absolute w-full h-full pointer-events-none" viewBox="0 0 1000 1000" preserveAspectRatio="none">
           <motion.path
             d="M0,500 Q250,400 300,500 T600,500 T1000,500"
             fill="none"
@@ -131,7 +141,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="text-black text-2xl px-5 z-10 text-center"
+            className="text-black text-xl md:text-2xl px-5 z-10 text-center"
           >
             <motion.span>{displayText}</motion.span>
             {isTypingComplete && (
@@ -153,7 +163,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
             onAnimationComplete={() => setIsMissionComplete(true)}
-            className="text-black text-2xl items-center justify-center mx-auto px-5 z-10 text-center"
+            className="text-black text-lg md:text-xl items-center justify-center mx-auto px-5 z-10 text-center"
             dangerouslySetInnerHTML={{ __html: mission }}
           />
         )}
@@ -164,7 +174,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors"
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg text-base md:text-lg font-semibold hover:bg-blue-600 transition-colors"
             onClick={onMeetTeamClick}
           >
             Meet the Team
