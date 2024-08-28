@@ -24,11 +24,6 @@ const teamMembers: TeamMember[] = [
     linkedin: "https://linkedin.com/in/vivin",
   },
   {
-    name: "Ayub Alhanafi",
-    image: "https://api.dicebear.com/9.x/lorelei/svg?seed=Charlie",
-    linkedin: "https://linkedin.com/in/ayub-hanafi-75936545",
-  },
-  {
     name: "Nihaar Nandedkar",
     image: "https://api.dicebear.com/9.x/lorelei/svg?seed=Bailey",
     linkedin: "https://linkedin.com/in/nihaar-nandedkar",
@@ -53,7 +48,7 @@ function Team() {
         <div className="md:w-2/3">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-0">
             {teamMembers.map((member, index) => (
-              <div key={index} className="flex flex-col items-center">
+              <div key={index} className="flex flex-col items-center justify-center">
                 <img
                   src={member.image}
                   alt={`${member.name}`}

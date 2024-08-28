@@ -31,20 +31,27 @@ function Title({ onMeetTeamClick }: TitleProps) {
         transition: { duration: 2, ease: "easeInOut" }
       });
       setIsCircleComplete(true);
+
+      await circleControls.start({
+        r: 25,
+        cx: 376,
+        cy: 200,
+        stroke: "black",
+        transition: { duration: 1, ease: "easeInOut" }
+      });
+
       circleControls.start({
         scale: [1, 1.05, 1],
         transition: { duration: 2, repeat: Infinity, repeatType: "reverse" }
       });
-      await circleControls.start({
-        cx: 250,
-        transition: { duration: 1, ease: "easeInOut" }
-      });
+
       await textControls.start({
         opacity: 1,
         x: 0,
         transition: { duration: 1 }
       });
       setTimeout(() => setIsTextComplete(true), 750);
+
       ekgControls.start({
         pathLength: [0, 1],
         transition: { duration: 2, ease: "linear", repeat: Infinity }
@@ -83,36 +90,26 @@ function Title({ onMeetTeamClick }: TitleProps) {
     <div className="relative flex flex-col gap-14 h-screen w-screen justify-center items-center overflow-hidden bg-white">
       <div className="flex items-center justify-center w-full z-10">
         <svg width="800" height="400" viewBox="0 0 800 400">
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
           <motion.circle
-            cx="400"
+            cx="380"
             cy="200"
             r="150"
             fill="none"
-            stroke="cyan"
+            stroke="black"
             strokeWidth="8"
             initial={{ pathLength: 0 }}
             animate={circleControls}
-            filter="url(#glow)"
           />
           <motion.text
-            x="520"
-            y="220"
+            x="410"
+            y="215"
             fontSize="48"
             fontWeight="bold"
             fill="black"
             initial={{ opacity: 0, x: 50 }}
             animate={textControls}
           >
-            Basata AI
+            basata AI
           </motion.text>
         </svg>
       </div>
@@ -134,7 +131,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="text-black text-2xl px-7 z-10"
+            className="text-black text-2xl px-5 z-10 text-center"
           >
             <motion.span>{displayText}</motion.span>
             {isTypingComplete && (
@@ -156,7 +153,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
             onAnimationComplete={() => setIsMissionComplete(true)}
-            className="text-black text-2xl items-center justify-center mx-[20%] px-7 z-10"
+            className="text-black text-2xl items-center justify-center mx-auto px-5 z-10 text-center"
             dangerouslySetInnerHTML={{ __html: mission }}
           />
         )}
@@ -167,7 +164,7 @@ function Title({ onMeetTeamClick }: TitleProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors z-10"
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors"
             onClick={onMeetTeamClick}
           >
             Meet the Team
